@@ -1,10 +1,10 @@
 package org.juancarlos.hoteles.service;
 
-import org.juancarlos.hoteles.model.Hotel;
+import org.juancarlos.hoteles.model.dto.HotelDTO;
 
 import java.util.List;
 
 public interface HotelService {
-    List<Hotel> getHotels();
-    Hotel getHotel(Long id);
+    List<HotelDTO> getHotelsList();
+    HotelDTO getHotelId(Long id);
 }

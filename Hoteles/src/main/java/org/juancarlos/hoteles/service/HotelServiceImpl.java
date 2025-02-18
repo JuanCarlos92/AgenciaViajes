@@ -1,6 +1,8 @@
 package org.juancarlos.hoteles.service;
 
-import org.juancarlos.hoteles.model.Hotel;
+import org.juancarlos.hoteles.converter.HotelConverter;
+import org.juancarlos.hoteles.entity.HotelEntity;
+import org.juancarlos.hoteles.model.dto.HotelDTO;
 import org.juancarlos.hoteles.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,15 @@ public class HotelServiceImpl implements HotelService {
     private HotelRepository hotelRepository;
 
     @Override
-    public List<Hotel> getHotels() {
-        return hotelRepository.findAll();
+    public List<HotelDTO> getHotelsList() {
+        List<HotelEntity> hotelEntity = hotelRepository.findAll();
+        return HotelConverter.hotelEntityToDTO(hotelEntity);
     }
 
     @Override
-    public Hotel getHotel(Long id) {
-        return hotelRepository.getById(id);
+    public HotelDTO getHotelId(Long id) {
+        HotelEntity hotelEntity = hotelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hotel con id: " +id + " no encontrado"));
+        return HotelConverter.hotelEntityToDTO(hotelEntity);
     }
 }

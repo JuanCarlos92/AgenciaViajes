@@ -1,44 +1,39 @@
 package org.juancarlos.hoteles.controller;
 
-import org.juancarlos.hoteles.model.Hotel;
+import lombok.AllArgsConstructor;
+import org.juancarlos.hoteles.model.dto.HotelDTO;
+import org.juancarlos.hoteles.model.response.GetHotelListResponse;
+import org.juancarlos.hoteles.model.response.GetHotelResponse;
 import org.juancarlos.hoteles.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/hoteles")
+@AllArgsConstructor
 public class HotelController {
     @Autowired
     private HotelService hotelService;
 
+    //Endpoint Lista hoteles
     @GetMapping()
-    public ResponseEntity<List<Hotel>> getAllHotels() {
-        List<Hotel> hotels = hotelService.getHotels();
-
-        //HttpHeaders = añadir encabezados
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Hoteles", String.valueOf(hotels.size()));
-        System.out.println(headers.get("Hoteles"));
-
-        return new ResponseEntity<>(hotels, headers, HttpStatus.OK);
+    public GetHotelListResponse getHotelsList() {
+        GetHotelListResponse response = new GetHotelListResponse();
+        response.setHotelsDTO(hotelService.getHotelsList());
+        return response;
     }
 
+    //Endpoint hotel por id
     @GetMapping("/{id}")
-    public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
-        Hotel hotel = hotelService.getHotel(id);
+    public GetHotelResponse getHotelId(@PathVariable Long id) {
+        HotelDTO hotel = hotelService.getHotelId(id);
+        new GetHotelResponse();
+        GetHotelResponse response = GetHotelResponse.builder().hotelDTO(hotel).build();
 
-        //HttpHeaders = añadir encabezados
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Hotel-ID", String.valueOf(id));
-
-        return new ResponseEntity<>(hotel, HttpStatus.OK);
+        response.setIsOk(true);
+        return response;
     }
 }
