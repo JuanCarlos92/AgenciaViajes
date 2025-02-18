@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Response {
     private Boolean isOk;
-    private String codError;
+    private String message;
 }

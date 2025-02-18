@@ -6,8 +6,6 @@ import org.juancarlos.vuelos.model.dto.VueloDTO;
 
 @Getter
 @Setter
-public class PutVueloResponse {
+public class PutVueloResponse extends Response {
     private VueloDTO vueloDTO;
-    private Boolean isOk;
-    private String message;
 }

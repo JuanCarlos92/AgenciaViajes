@@ -1,6 +1,5 @@
 package org.juancarlos.vuelos.controller;
 
-import lombok.AllArgsConstructor;
 import org.juancarlos.vuelos.model.dto.VueloDTO;
 import org.juancarlos.vuelos.model.response.GetVueloListResponse;
 import org.juancarlos.vuelos.model.response.GetVueloResponse;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/vuelos")
-@AllArgsConstructor
 public class VueloController {
     @Autowired
     private VueloService vueloService;
@@ -36,12 +34,12 @@ public class VueloController {
     }
     @PutMapping("/{id}/reservar/{plazas}")
     public PutVueloResponse reservarPlazas(@PathVariable Long id, @PathVariable int plazas) {
-        boolean actualizado = vueloService.reservarPlazas(id, plazas);
-
+        VueloDTO vueloActualizado = vueloService.reservarVuelo(id, plazas);
         PutVueloResponse response = new PutVueloResponse();
-        response.setIsOk(actualizado);
+        response.setVueloDTO(vueloActualizado);
+        response.setIsOk(vueloActualizado != null);
 
-        if (actualizado) {
+        if (vueloActualizado != null) {
             response.setMessage("Reserva realizada con éxito. Plazas actualizadas.");
         } else {
             response.setMessage("Error: No hay suficientes plazas disponibles o el vuelo no existe.");
