@@ -11,6 +11,6 @@ public class VueloDTO {
     private Long idVuelo;
     private String company;
     private String fecha;
-    private double precio;
+    private Double precio;
     private int plazas;
 }

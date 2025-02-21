@@ -27,4 +27,29 @@ public class HotelServiceImpl implements HotelService {
                 .orElseThrow(() -> new RuntimeException("Hotel con id: " +id + " no encontrado"));
         return HotelConverter.hotelEntityToDTO(hotelEntity);
     }
+
+    @Override
+    public HotelDTO getHotelNombre(String nombre) {
+        return null;
+    }
+
+    @Override
+    public HotelDTO postHotel(HotelDTO hotelDTO) {
+        return null;
+    }
+
+    @Override
+    public HotelDTO putHotel(HotelDTO hotelDTO) {
+        return null;
+    }
+
+    @Override
+    public HotelDTO diponibilidadHotel(Long id, int diponibilidad) {
+        return null;
+    }
+
+    @Override
+    public HotelDTO deleteHotel(Long id) {
+        return null;
+    }
 }

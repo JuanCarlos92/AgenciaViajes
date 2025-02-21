@@ -11,8 +11,7 @@ public class ReservaDTO {
     private Long id;
     private String nombre;
     private String dni;
-    private int plazas;
+    private Long idHotel;
+    private Long idVuelo;
 
-    private HotelDTO hotel;
-    private VueloDTO vuelo;
 }

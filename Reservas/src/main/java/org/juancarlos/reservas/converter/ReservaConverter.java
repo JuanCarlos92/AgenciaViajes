@@ -22,6 +22,19 @@ public class ReservaConverter {
                 .build();
     }
 
+    // Convierte ReservaDTO a ReservaEntity
+    public static ReservaEntity reservaDTOaEntity(ReservaDTO reservaDTO) {
+        if (reservaDTO == null) return null;
+
+        return ReservaEntity.builder()
+                .id(reservaDTO.getId())
+                .nombre(reservaDTO.getNombre())
+                .dni(reservaDTO.getDni())
+                .idHotel(reservaDTO.getIdHotel())
+                .idVuelo(reservaDTO.getIdVuelo())
+                .build();
+    }
+
     // Metodo para recorrer la lista
     public static List<ReservaDTO> reservaEntityToDTO(List<ReservaEntity> reservaEntities) {
         List<ReservaDTO> reservaDTOs = new ArrayList<>();
