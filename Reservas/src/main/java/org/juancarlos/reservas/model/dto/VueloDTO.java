@@ -1,4 +1,4 @@
-package org.juancarlos.vuelos.model.dto;
+package org.juancarlos.reservas.model.dto;
 
 import lombok.*;
 
@@ -8,10 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class VueloDTO {
-    private Long id;
+    private Long idVuelo;
     private String company;
     private String fecha;
-    private Double precio;
+    private double precio;
     private int plazas;
-
 }
