@@ -8,5 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class VueloRequest {
-    private int idVuelo;
+    private Long id;
+    private String company;
+    private String fecha;
+    private Double precio;
+    private int plazas;
 }

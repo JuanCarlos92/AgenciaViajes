@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 
 @Service
 public class ReservaServiceImpl implements ReservaService {
@@ -26,6 +28,7 @@ public class ReservaServiceImpl implements ReservaService {
     @Autowired
     private ReservaRepository reservaRepository;
 
+    //Metodo realizar la reserva del hotel y vuelo
     @Override
     public ReservaDTO reservar(ReservaRequest reservaRequest) throws Exception {
 
@@ -56,15 +59,15 @@ public class ReservaServiceImpl implements ReservaService {
 
         reservaRepository.save(entity);
 
-        webClient.put()
-                .uri(urlVuelos+"/"+reservaRequest.getIdVuelo()+"/reservar/"+(getVueloResponse.getVueloDTO().getPlazas() - 1))
+        webClient.post()
+                .uri(urlVuelos+"/"+reservaRequest.getIdVuelo()+"/reservar/"+(getVueloResponse.getVueloDTO().getPlazas()))
                 //.header("Authorization", "Basic " + getBase64(user,pass))
                 .retrieve()
                 .bodyToMono(GetVueloResponse.class)
                 .block();
 
-        webClient.put()
-                .uri(urlHoteles+"/"+reservaRequest.getIdHotel()+"/disponibilidad/"+(getHotelResponse.getHotelDTO().getDisponible() - 1))
+        webClient.post()
+                .uri(urlHoteles+"/"+reservaRequest.getIdHotel()+"/reservar/"+(getHotelResponse.getHotelDTO().getDisponible()))
                 //.header("Authorization", "Basic " + getBase64(user,pass))
                 .retrieve()
                 .bodyToMono(GetHotelResponse.class)
@@ -75,11 +78,54 @@ public class ReservaServiceImpl implements ReservaService {
 
     }
 
+    //Metodo Obtener Lista reservas
     @Override
-    public ReservaDTO getReservaId(Long id) {
-        ReservaEntity reservaEntity = reservaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reserva con id: " + id + " no encontrada"));
+    public List<ReservaDTO> getReservasList() {
+        List<ReservaEntity> reservaEntity = reservaRepository.findAll();
+
         return ReservaConverter.reservaEntityToDTO(reservaEntity);
     }
+
+    //Metodo Obtener ID reserva
+    @Override
+    public ReservaDTO getReservaId(Long id) {
+        ReservaEntity reservaEntity = reservaRepository.findById(id).orElseThrow(()-> new RuntimeException("Reserva no encontrada"));
+
+        return ReservaConverter.reservaEntityToDTO(reservaEntity);
+    }
+
+    //Metodo Obtener nombre reserva
+    @Override
+    public ReservaDTO getReservaNombre(String nombre) {
+        ReservaEntity reservaEntity = reservaRepository.findReservaByNombre(nombre);
+
+        return ReservaConverter.reservaEntityToDTO(reservaEntity);
+    }
+
+    //Metodo obtener dni reserva
+    @Override
+    public ReservaDTO getReservaDNI(String dni) {
+        ReservaEntity reservaEntity = reservaRepository.findReservaByDni(dni);
+
+        return ReservaConverter.reservaEntityToDTO(reservaEntity);
+    }
+
+    //Metodo Obtener nombre y dni reserva
+    @Override
+    public ReservaDTO getReservaNombreYDni(String nombre, String dni) {
+        ReservaEntity reservaEntity = reservaRepository.findReservaByNombreAndDni(nombre,dni);
+
+        return ReservaConverter.reservaEntityToDTO(reservaEntity);
+    }
+
+    //Metodo eliminar reserva por ID
+    @Override
+    public void deleteReserva(Long id) {
+        ReservaEntity reservaEntity = reservaRepository.findById(id).orElseThrow(()-> new RuntimeException("Reserva no encontrada"));
+
+        reservaRepository.delete(reservaEntity);
+
+    }
+
 }
 

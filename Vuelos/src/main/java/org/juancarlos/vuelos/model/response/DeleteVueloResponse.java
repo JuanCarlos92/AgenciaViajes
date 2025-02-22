@@ -8,6 +8,6 @@ import org.juancarlos.vuelos.model.dto.VueloDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PutVueloResponse extends Response {
-    private VueloDTO vueloDTO;
+public class DeleteVueloResponse extends Response {
+    private VueloDTO hotelDTO;
 }

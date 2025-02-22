@@ -1,6 +1,7 @@
 package org.juancarlos.vuelos.model.response;
 
 import lombok.*;
+
 import org.juancarlos.vuelos.model.dto.VueloDTO;
 
 @Getter
@@ -8,6 +9,6 @@ import org.juancarlos.vuelos.model.dto.VueloDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PutVueloResponse extends Response {
+public class PostVueloResponse extends Response {
     private VueloDTO vueloDTO;
 }

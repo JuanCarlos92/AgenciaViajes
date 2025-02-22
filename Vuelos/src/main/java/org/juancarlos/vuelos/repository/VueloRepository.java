@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VueloRepository extends JpaRepository<VueloEntity, Long> {
+    VueloEntity findVueloByCompany(String company);
 }

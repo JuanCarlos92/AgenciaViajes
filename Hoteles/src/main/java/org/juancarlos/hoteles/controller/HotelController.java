@@ -2,9 +2,11 @@ package org.juancarlos.hoteles.controller;
 
 import lombok.AllArgsConstructor;
 import org.juancarlos.hoteles.model.dto.HotelDTO;
+import org.juancarlos.hoteles.model.request.HotelRequest;
 import org.juancarlos.hoteles.model.response.*;
 import org.juancarlos.hoteles.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,15 +16,16 @@ public class HotelController {
     @Autowired
     private HotelService hotelService;
 
-    //Endpoint Lista hoteles
+    //Endpoint Obtener Lista HOTELES
     @GetMapping
     public GetHotelListResponse getHotelsList() {
         GetHotelListResponse response = new GetHotelListResponse();
         response.setHotelsDTO(hotelService.getHotelsList());
+
         return response;
     }
 
-    //Endpoint hotel por id
+    //Endpoint Obtener HOTEL por ID
     @GetMapping("/{id}")
     public GetHotelResponse getHotelId(@PathVariable Long id) {
         HotelDTO hotel = hotelService.getHotelId(id);
@@ -32,6 +35,7 @@ public class HotelController {
         return response;
     }
 
+    //Endpoint Obtener HOTEL por nombre
     @GetMapping("/nombre/{nombre}")
     public GetHotelResponse getHotelNombre(@PathVariable String nombre) {
         HotelDTO hotel = hotelService.getHotelNombre(nombre);
@@ -41,44 +45,49 @@ public class HotelController {
         return response;
     }
 
+    //Endpoint Crear HOTEL
     @PostMapping
-    public PostHotelResponse postHotel(@RequestBody HotelDTO hotelDTO) {
-        HotelDTO hotel = hotelService.postHotel(hotelDTO);
+    public PostHotelResponse postHotel(@RequestBody HotelRequest hotelRequest) {
+        HotelDTO hotel = hotelService.postHotel(hotelRequest);
         PostHotelResponse response = PostHotelResponse.builder().hotelDTO(hotel).build();
 
         response.setIsOk(true);
         return response;
     }
 
+    //Endpoint Actualizar reserva HOTEL
+    @PostMapping("/{id}/reservar/{disponible}")
+    public PostHotelResponse reservarHotel(@PathVariable Long id, @PathVariable int disponible) {
+        HotelDTO hotelActualizado = hotelService.reservarHotel(id, disponible);
+        PostHotelResponse response = new PostHotelResponse();
+        response.setHotelDTO(hotelActualizado);
+        response.setIsOk(hotelActualizado != null);
+
+        if (hotelActualizado != null) {
+            response.setMessage("La Disponibilidad del hotel con id " + id + " ha sido actualizado");
+        } else {
+            response.setMessage("Error: El hotel que has seleccionado no está disponible");
+        }
+
+        response.setIsOk(true);
+        return response;
+    }
+
+    //Endpoint Actualizar HOTEL
     @PutMapping
-    public PutHotelResponse putHotel(@RequestBody HotelDTO hotelDTO) {
-        HotelDTO hotel = hotelService.putHotel(hotelDTO);
+    public PutHotelResponse putHotel(@RequestBody HotelRequest hotelRequest) {
+        HotelDTO hotel = hotelService.putHotel(hotelRequest);
         PutHotelResponse response = PutHotelResponse.builder().hotelDTO(hotel).build();
 
         response.setIsOk(true);
         return response;
     }
-    @PutMapping("/{id}/disponibilidad/{disponibilidad}")
-    public PutHotelResponse disponibilidadHotel(@PathVariable Long id, @PathVariable int disponibilidad) {
-        HotelDTO hotelActualizado = hotelService.diponibilidadHotel(id, disponibilidad);
-        PutHotelResponse response = new PutHotelResponse();
-        response.setHotelDTO(hotelActualizado);
-        response.setIsOk(hotelActualizado != null);
 
-        if (hotelActualizado != null) {
-            response.setMessage("Disponibilidad del hotel actualizada");
-        }else{
-            response.setMessage("Error: No está disponible el hotel");
-        }
-        return response;
-    }
+    //Endpoint Eliminar Hotel por ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteHotel(@PathVariable Long id) {
+        hotelService.deleteHotel(id);
 
-    @DeleteMapping
-    public DeleteHotelResponse eliminarHotel(@PathVariable Long id) {
-        HotelDTO hotel = hotelService.deleteHotel(id);
-        DeleteHotelResponse response = DeleteHotelResponse.builder().hotelDTO(hotel).build();
-
-        response.setIsOk(true);
-        return response;
+        return ResponseEntity.ok("Hotel eliminado correctamente");
     }
 }
