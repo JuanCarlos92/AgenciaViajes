@@ -18,10 +18,10 @@ import java.util.List;
 @Service
 public class ReservaServiceImpl implements ReservaService {
 
-    @Value("urlHoteles")
-    String urlHoteles;
-    @Value("urlVuelos")
-    String urlVuelos;
+    @Value("${urlHoteles}")
+    private String urlHoteles;
+    @Value("${urlVuelos}")
+    private String urlVuelos;
 
     @Autowired
     private WebClient webClient;
@@ -50,7 +50,6 @@ public class ReservaServiceImpl implements ReservaService {
             throw new Exception("No se ha podido realizar la reserva");
         }
 
-
         ReservaEntity entity = new ReservaEntity();
         entity.setIdHotel(reservaRequest.getIdHotel());
         entity.setIdVuelo(reservaRequest.getIdVuelo());
@@ -60,21 +59,20 @@ public class ReservaServiceImpl implements ReservaService {
         reservaRepository.save(entity);
 
         webClient.post()
-                .uri(urlVuelos+"/"+reservaRequest.getIdVuelo()+"/reservar/"+(getVueloResponse.getVueloDTO().getPlazas()))
+                .uri(urlVuelos+"/"+reservaRequest.getIdVuelo()+"/"+ reservaRequest.getPlazaHotel())
                 //.header("Authorization", "Basic " + getBase64(user,pass))
                 .retrieve()
                 .bodyToMono(GetVueloResponse.class)
                 .block();
 
         webClient.post()
-                .uri(urlHoteles+"/"+reservaRequest.getIdHotel()+"/reservar/"+(getHotelResponse.getHotelDTO().getDisponible()))
+                .uri(urlHoteles+"/"+reservaRequest.getIdHotel()+"/"+ reservaRequest.getPlazaVuelo())
                 //.header("Authorization", "Basic " + getBase64(user,pass))
                 .retrieve()
                 .bodyToMono(GetHotelResponse.class)
                 .block();
 
         return ReservaConverter.reservaEntityToDTO(entity);
-
 
     }
 

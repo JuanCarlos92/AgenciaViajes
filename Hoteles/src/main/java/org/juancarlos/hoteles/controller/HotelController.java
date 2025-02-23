@@ -56,7 +56,7 @@ public class HotelController {
     }
 
     //Endpoint Actualizar reserva HOTEL
-    @PostMapping("/{id}/reservar/{disponible}")
+    @PostMapping("/{id}/{disponible}")
     public PostHotelResponse reservarHotel(@PathVariable Long id, @PathVariable int disponible) {
         HotelDTO hotelActualizado = hotelService.reservarHotel(id, disponible);
         PostHotelResponse response = new PostHotelResponse();

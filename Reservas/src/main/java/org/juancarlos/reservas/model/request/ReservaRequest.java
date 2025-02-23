@@ -12,4 +12,6 @@ public class ReservaRequest {
     private Long idVuelo;
     private String nombre;
     private String dni;
+    private int plazaHotel;
+    private int plazaVuelo;
 }

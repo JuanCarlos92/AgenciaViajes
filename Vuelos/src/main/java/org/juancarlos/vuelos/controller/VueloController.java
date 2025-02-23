@@ -54,7 +54,7 @@ public class VueloController {
     }
 
     //Endpoint Actualizar plazas del VUELO
-    @PostMapping("/{id}/reservar/{plazas}")
+    @PostMapping("/{id}/{plazas}")
     public PostVueloResponse reservarPlazas(@PathVariable Long id, @PathVariable int plazas) {
         VueloDTO vueloActualizado = vueloService.reservarVuelo(id, plazas);
         PostVueloResponse response = new PostVueloResponse();
