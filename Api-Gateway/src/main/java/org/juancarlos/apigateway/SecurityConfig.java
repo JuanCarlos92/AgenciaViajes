@@ -3,6 +3,7 @@ package org.juancarlos.apigateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,16 +18,19 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity // Habilita Spring Security
 public class SecurityConfig {
 
-    private final DataSource dataSource;
-
-    public SecurityConfig(DataSource dataSource) { // Inyeccion de dependencia
-        this.dataSource = dataSource;
+    public DataSource dataSource() {
+        DriverManagerDataSource ds=new DriverManagerDataSource();
+        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setUrl("jdbc:mysql://localhost:3306/springsecurity?serverTimezone=UTC");
+        ds.setUsername("root");
+        ds.setPassword("root");
+        return ds;
     }
 
     //config de users de la BD
     @Bean
     public JdbcUserDetailsManager usersDetailsJdbc() {
-        JdbcUserDetailsManager jdbcDetails = new JdbcUserDetailsManager(dataSource);
+        JdbcUserDetailsManager jdbcDetails = new JdbcUserDetailsManager(dataSource());
         jdbcDetails.setUsersByUsernameQuery("select user, pwd, enabled"
                 + " from users where user=?");
         jdbcDetails.setAuthoritiesByUsernameQuery("select user, rol "
