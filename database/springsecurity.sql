@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
--- Host: localhost    Database: agencia_viajes
+-- Host: localhost    Database: springsecurity
 -- ------------------------------------------------------
 -- Server version	8.0.41
 
@@ -16,30 +16,52 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `reservas`
+-- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `reservas`;
+DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reservas` (
-  `idreserva` int unsigned NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) NOT NULL,
-  `dni` varchar(45) NOT NULL,
-  `hotel` int unsigned NOT NULL,
-  `vuelo` int unsigned NOT NULL,
-  PRIMARY KEY (`idreserva`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `roles` (
+  `rol` varchar(50) NOT NULL,
+  `user` varchar(50) NOT NULL,
+  PRIMARY KEY (`rol`,`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reservas`
+-- Dumping data for table `roles`
 --
 
-LOCK TABLES `reservas` WRITE;
-/*!40000 ALTER TABLE `reservas` DISABLE KEYS */;
-INSERT INTO `reservas` VALUES (1,'ggggggg','7777777',2,1);
-/*!40000 ALTER TABLE `reservas` ENABLE KEYS */;
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES ('ROLE_ADMIN','admin'),('ROLE_OPERATOR','user2'),('ROLE_USERS','admin'),('ROLE_USERS','user1');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `user` varchar(50) NOT NULL,
+  `pwd` varchar(100) DEFAULT NULL,
+  `enabled` tinyint DEFAULT NULL,
+  PRIMARY KEY (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('admin','{noop}admin',1),('user1','{noop}user1',1),('user2','{noop}user2',1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-17 12:20:21
+-- Dump completed on 2025-02-24 22:44:06
