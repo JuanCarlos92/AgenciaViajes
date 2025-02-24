@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: eureka-server
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+  server:
+    enable-self-preservation: true  # Habilita el modo de auto-preservación
+    renewal-percent-threshold: 0.75  # Cambia el umbral de renovación al 75%
+    eviction-interval-timer-in-ms: 60000  # Verifica instancias no renovadas cada 60s
