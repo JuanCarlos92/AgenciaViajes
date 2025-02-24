@@ -1,10 +1,10 @@
-package org.juancarlos.eurekaserver;
+package org.juancarlos.reservas;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApplicationTests {
+class AppReservasTests {
 
     @Test
     void contextLoads() {

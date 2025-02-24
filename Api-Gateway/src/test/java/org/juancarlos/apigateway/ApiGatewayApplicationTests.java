@@ -1,10 +1,10 @@
-package org.juancarlos.reservas;
+package org.juancarlos.apigateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApplicationTests {
+class ApiGatewayApplicationTests {
 
     @Test
     void contextLoads() {
