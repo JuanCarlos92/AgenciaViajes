@@ -19,7 +19,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity // Habilita Spring Security
 public class SecurityConfig {
 
-    //        public DataSource dataSource() {
+//        public DataSource dataSource() {
 //        DriverManagerDataSource ds=new DriverManagerDataSource();
 //        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //        ds.setUrl("jdbc:mysql://localhost:3306/springsecurity?serverTimezone=UTC");
@@ -27,7 +27,6 @@ public class SecurityConfig {
 //        ds.setPassword("root");
 //        return ds;
 //    }
-
 
     private final DataSource dataSource;
 
@@ -75,7 +74,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
-
 }
 
