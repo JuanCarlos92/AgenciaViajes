@@ -1,4 +1,4 @@
-package org.juancarlos.apigateway;
+package org.juancarlos.security.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

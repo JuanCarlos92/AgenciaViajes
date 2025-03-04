@@ -1,8 +1,8 @@
-package org.juancarlos.apigateway.service;
+package org.juancarlos.security.service;
 
-import org.juancarlos.apigateway.UserEntity;
-import org.juancarlos.apigateway.UserRepository;
-import org.juancarlos.apigateway.dto.LoginDTO;
+import org.juancarlos.security.entity.UserEntity;
+import org.juancarlos.security.repository.UserRepository;
+import org.juancarlos.security.dto.LoginDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

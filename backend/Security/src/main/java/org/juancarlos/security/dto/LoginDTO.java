@@ -1,4 +1,4 @@
-package org.juancarlos.apigateway.dto;
+package org.juancarlos.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
