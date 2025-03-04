@@ -11,6 +11,7 @@
         <module name="Api-gateway" />
         <module name="Vuelos" />
         <module name="Reservas" />
+        <module name="Security" />
         <module name="Hoteles" />
       </profile>
     </annotationProcessing>
@@ -24,6 +25,7 @@
       <module name="EurekaServer" options="-parameters" />
       <module name="Hoteles" options="-parameters" />
       <module name="Reservas" options="-parameters" />
+      <module name="Security" options="-parameters" />
       <module name="Vuelos" options="-parameters" />
       <module name="security" options="-parameters" />
     </option>
