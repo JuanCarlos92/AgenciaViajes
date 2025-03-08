@@ -18,7 +18,12 @@ export class RequestService {
     }
     headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', '*/*');
+    headers = headers.append('Access-Control-Allow-Origin', '*');
     headers = headers.append('Cache-Control', 'no-cache');
+
+    if (localStorage.getItem('token')) {
+      headers = headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    }
 
     requestServiceOptions.headers = headers;
 

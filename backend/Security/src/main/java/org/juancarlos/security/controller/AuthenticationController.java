@@ -1,5 +1,6 @@
 package org.juancarlos.security.controller;
 
+import org.juancarlos.security.entity.RoleEntity;
 import org.juancarlos.security.service.JwtService;
 import org.juancarlos.security.entity.UserEntity;
 import org.juancarlos.security.dto.LoginDTO;
@@ -46,8 +47,9 @@ public class AuthenticationController {
         // Autenticar al usuario con las credenciales proporcionadas
         UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
 
+        RoleEntity roleEntity = authenticationService.getRol(authenticatedUser.getUser());
         // Generar el token JWT para el usuario autenticado
-        String jwtToken = jwtService.generateToken(authenticatedUser);
+        String jwtToken = jwtService.generateToken(authenticatedUser, roleEntity.getRol());
 
         // Crear la respuesta con el token JWT y su tiempo de expiración
         LoginResponse loginResponse = LoginResponse.builder()

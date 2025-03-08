@@ -1,0 +1,30 @@
+{
+    "/auth": {
+      "target": "http://localhost:8085",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+
+    "/reservas": {
+      "target": "http://localhost:8080",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+
+    "/hoteles": {
+      "target": "http://localhost:8080",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+
+    "/vuelos": {
+      "target": "http://localhost:8080",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+  }
+  

@@ -1,7 +1,5 @@
 package org.juancarlos.security.service;
 
-import io.jsonwebtoken.Claims;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -36,36 +34,15 @@ public class JwtService {
     private long jwtExpiration;
 
     /**
-     * Extrae el nombre de usuario del token JWT.
-     *
-     * @param token El token JWT del cual extraer el nombre de usuario.
-     * @return El nombre de usuario contenido en el token.
-     */
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    /**
-     * Extrae un reclamo específico del token JWT.
-     *
-     * @param token          El token JWT.
-     * @param claimsResolver Función para extraer el reclamo deseado.
-     * @param <T>            Tipo del reclamo extraído.
-     * @return El valor del reclamo extraído.
-     */
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    /**
      * Genera un token JWT sin reclamos adicionales.
      *
      * @param userDetails Detalles del usuario para el cual generar el token.
      * @return Token JWT generado.
      */
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails, String role) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", role);
+        return generateToken(extraClaims, userDetails);
     }
 
     /**
@@ -109,53 +86,6 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    /**
-     * Verifica si un token JWT es válido para un usuario específico.
-     *
-     * @param token       Token JWT a validar.
-     * @param userDetails Detalles del usuario asociado al token.
-     * @return true si el token es válido, false en caso contrario.
-     */
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
-
-    /**
-     * Verifica si un token JWT ha expirado.
-     *
-     * @param token Token JWT a verificar.
-     * @return true si el token ha expirado, false en caso contrario.
-     */
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    /**
-     * Extrae la fecha de expiración de un token JWT.
-     *
-     * @param token Token JWT.
-     * @return Fecha de expiración del token.
-     */
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    /**
-     * Extrae todos los reclamos de un token JWT.
-     *
-     * @param token Token JWT.
-     * @return Objeto {@link Claims} con la información del token.
-     */
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
     }
 
     /**

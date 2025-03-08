@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.juancarlos</groupId>
-    <artifactId>Api-gateway</artifactId>
+    <artifactId>security</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Api-gateway</name>
-    <description>Api-gateway</description>
+    <name>security</name>
+    <description>security</description>
     <url/>
     <licenses>
         <license/>

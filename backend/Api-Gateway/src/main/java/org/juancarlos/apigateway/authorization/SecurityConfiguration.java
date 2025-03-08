@@ -1,13 +1,11 @@
-package org.juancarlos.security.config;
+package org.juancarlos.apigateway.authorization;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,20 +17,7 @@ import java.util.List;
  * Se encarga de configurar la autorización, autenticación y CORS para la protección de los recursos de la aplicación.
  */
 @Configuration
-@EnableWebSecurity
 public class SecurityConfiguration {
-    private final AuthenticationProvider authenticationProvider;
-
-    /**
-     * Constructor que inyecta las dependencias necesarias para la configuración de seguridad.
-     *
-     * @param authenticationProvider  el proveedor de autenticación que valida las credenciales
-     */
-    public SecurityConfiguration(
-            AuthenticationProvider authenticationProvider
-    ) {
-        this.authenticationProvider = authenticationProvider;
-    }
 
     /**
      * Configura los filtros de seguridad para la aplicación.
@@ -40,20 +25,25 @@ public class SecurityConfiguration {
      *
      * @param http el objeto HttpSecurity que permite configurar la seguridad de las solicitudes HTTP
      * @return un objeto SecurityFilterChain que contiene la configuración de seguridad
-     * @throws Exception si ocurre un error durante la configuración de la seguridad
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable) // Deshabilita la protección CSRF
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll() // Permite el acceso a cualquier otra solicitud sin restricciones
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtAuthenticationWebFilter jwtAuthenticationWebFilter) {
+        return http
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(auth -> auth
+                        .pathMatchers("/swagger-ui.html").permitAll()
+                        .pathMatchers("/swagger-ui/**").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/hoteles/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.PUT, "/hoteles/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.DELETE, "/hoteles/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/vuelos/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.PUT, "/vuelos/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.DELETE, "/vuelos/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.DELETE, "/reservas/**").hasRole("ADMIN")
+                        .anyExchange().authenticated()
                 )
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Define que no se usará sesión en el servidor, utilizando JWT para autenticación
-                )
-                .authenticationProvider(authenticationProvider);
-
-        return http.build();
+                .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION) // Agregar filtro manualmente
+                .build();
     }
 
     /**
@@ -76,4 +66,5 @@ public class SecurityConfiguration {
 
         return source;
     }
+
 }

@@ -1,0 +1,12 @@
+<p>reserva works!</p>
+
+<select [(ngModel)]="hotelSeleccionado">
+    <option *ngFor="let item of listaHoteles" [value]="item">{{ item }}</option>
+</select>
+
+  
+
+<button (click)="reservar()">Reservar</button>
+<button *ngIf="isAdmin" (click)="delete()">Eliminar reserva</button>
+
+{{msg}}
