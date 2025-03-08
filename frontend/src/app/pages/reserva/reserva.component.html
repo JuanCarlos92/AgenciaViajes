@@ -1,12 +1,239 @@
-<p>reserva works!</p>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <!-- Columna para el formulario de reserva -->
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Realizar la Reserva</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Seleccionar Hotel:</label>
+                        <select class="form-select" [(ngModel)]="hotelSeleccionadoDisponible">
+                            <option *ngFor="let item of hotelesDisponible" [value]="item.id">
+                                Nombre: {{ item.nombre }} | Categoría: {{ item.categoria }} | Precio: {{ item.precio }}
+                                | Plazas: {{ item.precio }}
+                            </option>
+                        </select>
+                    </div>
 
-<select [(ngModel)]="hotelSeleccionado">
-    <option *ngFor="let item of listaHoteles" [value]="item">{{ item }}</option>
-</select>
+                    <div class="mb-3">
+                        <label class="form-label">Seleccionar Vuelo:</label>
+                        <select class="form-select" [(ngModel)]="vueloSeleccionadoDisponible">
+                            <option *ngFor="let item of VuelosDisponible" [value]="item.id">
+                                Compañia Vuelo: {{ item.company }} | Fecha Vuelo: {{ item.fecha }} | Precio: {{
+                                item.precio }} | Plazas: {{ item.precio }}
+                            </option>
+                        </select>
+                    </div>
 
-  
+                    <div class="mb-3">
+                        <label class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" [(ngModel)]="nombre">
+                    </div>
 
-<button (click)="reservar()">Reservar</button>
-<button *ngIf="isAdmin" (click)="delete()">Eliminar reserva</button>
+                    <div class="mb-3">
+                        <label class="form-label">DNI:</label>
+                        <input type="text" class="form-control" [(ngModel)]="dni">
+                    </div>
 
-{{msg}}
+                    <div class="mb-3">
+                        <label class="form-label">Plazas de hotel a reservar:</label>
+                        <input type="number" class="form-control" [(ngModel)]="plazaHotel">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Plazas de vuelo a reservar:</label>
+                        <input type="number" class="form-control" [(ngModel)]="plazaVuelo">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" (click)="reservar()">Reservar</button>
+                    </div>
+
+                    <p class="text-success text-center mt-2">{{msg}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna para la lista de reservas -->
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isAdmin" class="btn btn-primary" (click)="toggleListaReservas()">
+                            {{ mostrarListaReservas ? 'Ocultar Lista de Reservas' : 'Mostrar Lista de Reservas' }}
+                        </button>
+                    </div>
+                    <br>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" (click)="toggleListaHoteles()">
+                            {{ mostrarListaHoteles ? 'Ocultar Lista de Hoteles' : 'Mostrar Lista de Hoteles' }}
+                        </button>
+                    </div>
+                    <br>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" (click)="toggleListaVuelos()">
+                            {{ mostrarListaVuelos ? 'Ocultar Lista de Vuelos' : 'Mostrar Lista de Vuelos' }}
+                        </button>
+                    </div>
+                    <div *ngIf="mostrarListaReservas">
+                        <h5>Lista de reservas:</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let item of listaReservas">
+                                <p><strong>Nombre:</strong> {{ item.nombre }}</p>
+                                <p><strong>DNI:</strong> {{ item.dni }}</p>
+                                <p><strong>ID Hotel:</strong> {{ item.idHotel }}</p>
+                                <p><strong>ID Vuelo:</strong> {{ item.idVuelo }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div *ngIf="mostrarListaHoteles">
+                        <h5>Lista de Hoteles:</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let item of listaHoteles">
+                                <p><strong>Nombre del Hotel:</strong> {{ item.nombre }}</p>
+                                <p><strong>Categoría del Hotel:</strong> {{ item.categoria }}</p>
+                                <p><strong>Precio:</strong> {{ item.precio }}</p>
+                                <p><strong>Plazas restantes:</strong> {{ item.disponible }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div *ngIf="mostrarListaVuelos">
+                        <h5>Lista de Vuelos:</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let item of listaVuelos">
+                                <p><strong>Compañía del vuelo:</strong> {{ item.company }}</p>
+                                <p><strong>Fecha del vuelo:</strong> {{ item.fecha }}</p>
+                                <p><strong>Precio:</strong> {{ item.precio }}</p>
+                                <p><strong>Plazas restantes:</strong> {{ item.plazas }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div *ngIf="isAdmin" class="card shadow-lg">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-danger" (click)="toggleOpcionesEliminar()">Eliminar</button>
+                    </div>
+                    <div *ngIf="mostrarOpcionesEliminar">
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <label *ngIf="isAdmin" class="form-label">Selecciona una reserva para eliminar:</label>
+                                <select *ngIf="isAdmin" class="form-select" [(ngModel)]="reservaSeleccionada">
+                                    <option *ngFor="let item of listaReservas" [value]="item.id">
+                                        Nombre: {{ item.nombre }} | Dni: {{item.dni}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button *ngIf="isAdmin" class="btn btn-danger w-100" (click)="deleteReserva()">Eliminar
+                                    Reserva</button>
+                            </div>
+                        </div>
+                        <p class="text-success text-center mt-2">{{msgDelete}}</p>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <select *ngIf="isAdmin" class="form-select" [(ngModel)]="hotelSeleccionado">
+                                    <option *ngFor="let item of listaHoteles" [value]="item.id">
+                                        Nombre: {{ item.nombre }} | Categoría: {{ item.categoria }} | Precio: {{
+                                        item.precio }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button *ngIf="isAdmin" class="btn btn-danger w-100" (click)="deleteHotel()">Eliminar
+                                    Hotel</button>
+                            </div>
+                        </div>
+                        <p class="text-success text-center mt-2">{{msgDelete}}</p>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <select *ngIf="isAdmin" class="form-select" [(ngModel)]="vueloSeleccionado">
+                                    <option *ngFor="let item of listaVuelos" [value]="item.id">
+                                        Compañía: {{ item.company }} | Fecha: {{ item.fecha }} | Precio: {{ item.precio
+                                        }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button *ngIf="isAdmin" class="btn btn-danger w-100" (click)="deleteVuelo()">Eliminar
+                                    Vuelo</button>
+                            </div>
+                        </div>
+                        <p class="text-success text-center mt-2">{{msgDelete}}</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div *ngIf="isAdmin" class="card shadow-lg">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" (click)="toggleFormularioHotel()">Crear Hotel</button>
+                    </div>
+                    <div *ngIf="mostrarFormularioHotel">
+                        <div class="card-header bg-success text-white text-center">
+                            <h4>Añadir Nuevo Hotel</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre del Hotel:</label>
+                                <input type="text" class="form-control" [(ngModel)]="hotelNombre">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Categoría del Hotel:</label>
+                                <input type="text" class="form-control" [(ngModel)]="hotelCategoria">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Precio:</label>
+                                <input type="number" class="form-control" [(ngModel)]="hotelPrecio">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Plazas Disponibles:</label>
+                                <input type="number" class="form-control" [(ngModel)]="hotelDisponible">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-success" (click)="postHotel()">Añadir Hotel</button>
+                            </div>
+                            <p class="text-success text-center mt-2">{{msgPost}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" (click)="toggleFormularioVuelo()">Crear Vuelo</button>
+                    </div>
+                    <div *ngIf="mostrarFormularioVuelo">
+                        <div class="card-header bg-success text-white text-center">
+                            <h4>Añadir Nuevo Vuelo</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de la Compañia:</label>
+                                <input type="text" class="form-control" [(ngModel)]="vuelocompany">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Fecha del Vuelo:</label>
+                                <input type="text" class="form-control" [(ngModel)]="vueloFecha">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Precio:</label>
+                                <input type="number" class="form-control" [(ngModel)]="vueloPrecio">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Plazas Disponibles:</label>
+                                <input type="number" class="form-control" [(ngModel)]="vueloPlazas">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-success" (click)="postVuelo()">Añadir Vuelo</button>
+                            </div>
+                            <p class="text-success text-center mt-2">{{msgPost}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

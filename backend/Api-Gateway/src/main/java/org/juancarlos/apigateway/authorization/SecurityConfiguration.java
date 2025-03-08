@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                         .pathMatchers(HttpMethod.POST, "/vuelos/**").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.PUT, "/vuelos/**").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.DELETE, "/vuelos/**").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/reservas").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.DELETE, "/reservas/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )

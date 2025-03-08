@@ -77,7 +77,7 @@ public class ReservaController {
     }
 
     //Endpoint eliminar reserva
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReserva(@PathVariable Long id){
         reservaService.deleteReserva(id);
 
