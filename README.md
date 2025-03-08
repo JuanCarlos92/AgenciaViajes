@@ -11,6 +11,7 @@ Este proyecto implementa una **Agencia de Viajes** basada en **microservicios co
 - **Spring Security** y **JWT** para autenticación y autorización.
 - **MySQL y JPA/Hibernate** para la persistencia de datos.
 - Comunicación entre microservicios con **WebClient**.
+- Interfaz web en Angular con Bootstrap para mejorar la experiencia de usuario.
 
 ## Arquitectura de Microservicios
 La aplicación está compuesta por los siguientes **microservicios**:
@@ -21,33 +22,40 @@ La aplicación está compuesta por los siguientes **microservicios**:
 | **Vuelos**      | Devuelve la lista de vuelos disponibles y actualiza las plazas al hacer una reserva. |
 | **Reservas**    | Registra las reservas, vinculando vuelos y hoteles a un usuario. |
 | **Eureka Server** | Actúa como servidor de descubrimiento para los microservicios. |
-| **API Gateway**  | Centraliza y redirige las peticiones a los microservicios correspondientes. |
+| **API Gateway**  | Centraliza y redirige las peticiones a los microservicios correspondientes. Implementa la seguridad mediante Token JWT y gestiona el filtrado de endpoints.|
+| **Security**  | Se encarga exclusivamente de la generación y validación de tokens JWT. |
 
 ## Tecnologías Utilizadas
+### Backend:
 - **Spring Boot 3+**
 - **Spring Cloud Netflix Eureka** (para descubrimiento de servicios)
 - **Spring Security & JWT** (para autenticación y autorización)
 - **Spring WebFlux - WebClient** (para la comunicación entre microservicios)
 - **Spring Data JPA & Hibernate**
 - **MySQL** (Base de datos relacional)
-- **Docker** (para despliegue de los microservicios)
+
+### Frontend:
+- **Angular 19+**
+- **Bootstrap 5** (para diseño responsivo y estilos)
+- **Angular Services** para la comunicación con el backend
+- **RxJS** para manejo de peticiones asíncronas
 
 ## Instalación y Configuración
 ### Requisitos Previos
 - **JDK 17+**
 - **Maven 3+**
-- **Docker (opcional)**
 - **MySQL 8+**
+- **Node.js 18+** y npm (para ejecutar el frontend)
 
 ### Pasos para Ejecutar el Proyecto
 1. **Clona el repositorio**
    ```bash
-   git clone https://github.com/tu-usuario/AgenciaViajes.git
+   git clone https://github.com/JuanCarlos92/AgenciaViajes.git
    cd AgenciaViajes
    ```
 
 2. **Configura la base de datos**
-   - Crea una base de datos en MySQL llamada `agencia_viajes`.
+   - Importa las base de datos que se encuentran en el la carpeta database
    - Modifica las credenciales en `application.properties` de cada microservicio para que coincidan con tu configuración.
 
 3. **Inicia Eureka Server**
@@ -55,8 +63,18 @@ La aplicación está compuesta por los siguientes **microservicios**:
    eureka-server
    spring-boot:run
    ```
-
-4. **Inicia los microservicios**
+   
+4. **Inicia el Security**
+   ```bash
+   security
+   ```
+   
+5. **Inicia el API Gateway**
+   ```bash
+   api-gateway
+   ```
+   
+6. **Inicia los microservicios**
    ```bash
    hoteles-service
    ```
@@ -66,31 +84,33 @@ La aplicación está compuesta por los siguientes **microservicios**:
    ```bash
    reservas-service
    ```
-
-5. **Inicia el API Gateway**
+   
+7. **Iniciar el frontend en Angular**
    ```bash
-   api-gateway
+   cd frontend
+   npm install
+   npm start
    ```
-
-6. **Prueba los endpoints**
+   
+## Endpoints de los Microservicios
    - **Hoteles**: `http://localhost:8081/hoteles`
    - **Vuelos**: `http://localhost:8082/vuelos`
    - **Reservas**: `http://localhost:8083/reservas`
+   - **Security**: `http://localhost:8085`
    - **API Gateway**: `http://localhost:8080`
 
 ## Seguridad y Autenticación
 - Se utiliza **Spring Security** con **JWT** para la autenticación de usuarios.
 - Para probar, se puede generar un token con un endpoint de autenticación y usarlo en las peticiones a los servicios.
 
-## Despliegue con Docker
-Si deseas ejecutar los servicios con Docker, puedes usar el siguiente comando:
-```bash
-docker-compose up --build
-```
+### Generar Token
+Se puede generar mediante Swagger en `http://localhost:8085/swagger-ui.html`
+
+## Contribuciones
 
 ## Contribuciones
 Si deseas contribuir a este proyecto, ¡las pull requests son bienvenidas!
 
 ---
 **Autor:** Juan Carlos Filter Martín  
-📌 Proyecto final - Desarrollo de Microservicios con Spring Boot
+📌 Proyecto final de PSP DAM2 - Desarrollo de Microservicios con Spring Boot
