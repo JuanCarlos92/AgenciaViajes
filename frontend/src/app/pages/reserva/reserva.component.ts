@@ -73,13 +73,15 @@ export class ReservaComponent {
     this.agenciaViajeService.getHoteles().subscribe(res => {
       this.hotelesDisponible = res['hotelsDTO'].filter((hotel: any) => hotel.disponible > 0);
       this.listaHoteles = res['hotelsDTO'];
+      console.log(this.listaHoteles);
     });
   }
 
   cargarVuelos() {
     this.agenciaViajeService.getVuelos().subscribe(res => {
       this.VuelosDisponible = res['vuelosDTO'].filter((vuelo: any) => vuelo.plazas > 0);
-      this.listaHoteles = res['vuelosDTO'];
+      this.listaVuelos = res['vuelosDTO'];
+      console.log(this.listaVuelos);
     });
   }
 
